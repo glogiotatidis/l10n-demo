@@ -1,5 +1,5 @@
 <html>
-<head lang="" dir="">
+<head>
   <meta charset="utf-8">
   <link href="style.css" type="text/css" rel="stylesheet">
   <link rel="stylesheet" href="https://code.cdn.mozilla.net/fonts/fira.css">
@@ -7,8 +7,8 @@
   <link rel="prefetch" type="application/l10n" href="strings.ini" />
 </head>
 <body>
-  <h1 data-l10n-id="header">Hello Mozilla</h1>
-  <p data-l10n-id="main-content">Main content</p>
+  <h1 data-l10n-id="header"></h1>
+  <p data-l10n-id="main-content"></p>
   <select id="language-dropdown">
     <option value="en">English</option>
     <option value="fr">French</option>
@@ -17,14 +17,22 @@
   <script type="text/javascript" src="libs/zepto.min.js"></script>
   <script type="text/javascript">
    $(document).ready(function() {
+       var supportedLocales = [
+           'en', 'el', 'fr'
+       ]
+       if (supportedLocales.indexOf(document.webL10n.getLanguage()) === -1) {
+           document.webL10n.setLanguage(supportedLocales[0]);
+       }
+
        $('#language-dropdown').change(function() {
            document.webL10n.setLanguage(this.value);
        });
-       var language_code = document.webL10n.getLanguage();
-       $('#language-dropdown').val(language_code);
-       $('html').attr('lang', language_code);
-       $('html').attr('dir', document.webL10n.getDirection());
    });
+   window.addEventListener('localized', function() {
+       $('html').attr('lang', document.webL10n.getLanguage());
+       $('html').attr('dir', document.webL10n.getDirection());
+       $('#language-dropdown').val(document.webL10n.getLanguage());
+   }, false);
   </script>
 </body>
 </html>
